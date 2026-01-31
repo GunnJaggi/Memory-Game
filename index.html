@@ -17,6 +17,25 @@ body {
     height: 100vh;
 }
 
+/* Back button */
+.back-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    background: rgba(15,23,42,0.9);
+    color: #38bdf8;
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.back-btn:hover {
+    background: #020617;
+}
+
+/* Main container */
 .container {
     background: #0f172a;
     padding: 40px;
@@ -86,10 +105,38 @@ button {
 button:hover {
     background: #0ea5e9;
 }
+
+/* Game Over Overlay */
+#gameOverOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2,6,23,0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+#gameOverBox {
+    background: #0f172a;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+}
+
+#gameOverBox h2 {
+    color: #ef4444;
+    margin-top: 0;
+}
 </style>
 </head>
 
 <body>
+
+<a class="back-btn" href="https://gunnjaggi.github.io/GunnJaggi/index.html">
+    ← Back to Home
+</a>
 
 <div class="container">
     <h1>Neural Overload</h1>
@@ -109,10 +156,23 @@ button:hover {
     <button onclick="startGame()">Start</button>
 </div>
 
+<!-- Game Over Overlay -->
+<div id="gameOverOverlay">
+    <div id="gameOverBox">
+        <h2>Game Over 💔</h2>
+        <p style="color:#94a3b8;">Neural overload detected.</p>
+        <p style="margin:20px 0;">
+            Level reached: <strong id="finalLevel"></strong>
+        </p>
+        <button onclick="restartGame()">Start Again</button>
+    </div>
+</div>
+
 <script>
 const tiles = document.querySelectorAll(".tile");
 const info = document.getElementById("info");
 const levelEl = document.getElementById("level");
+const overlay = document.getElementById("gameOverOverlay");
 
 let sequence = [];
 let playerIndex = 0;
@@ -120,6 +180,7 @@ let level = 0;
 let acceptingInput = false;
 
 function startGame() {
+    overlay.style.display = "none";
     sequence = [];
     level = 0;
     nextLevel();
@@ -173,12 +234,22 @@ tiles.forEach(tile => {
             }
         } else {
             tile.classList.add("wrong");
-            info.textContent = "GAME OVER 💀";
             acceptingInput = false;
+            document.getElementById("finalLevel").textContent = level;
+            overlay.style.display = "flex";
         }
     });
 });
+
+function restartGame() {
+    overlay.style.display = "none";
+    startGame();
+}
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
